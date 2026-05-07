@@ -23,7 +23,7 @@ const Navbar = () => {
 
         {/* Desktop Links */}
         <ul className="hidden md:flex items-center gap-6">
-          {["/", "/products", "/login"].map((path, i) => (
+          {["/", "/products", "/login", "/register"].map((path, i) => (
             <li key={path}>
               <NavLink
                 to={path}
@@ -31,7 +31,7 @@ const Navbar = () => {
                 className={linkClass}
                 style={({ isActive }) => (isActive ? activeStyle : {})}
               >
-                {["Home", "Products", "Login"][i]}
+                {["Home", "Products", "Login", "Register"][i]}
               </NavLink>
             </li>
           ))}
@@ -66,7 +66,7 @@ const Navbar = () => {
               style={({ isActive }) => (isActive ? activeStyle : {})}
               onClick={() => setMenuOpen(false)}
             >
-              {["Home", "Products", "Login"][i]}
+              {["Home", "Products", "Login", "Register"][i]}
             </NavLink>
           ))}
         </div>

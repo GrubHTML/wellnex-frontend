@@ -8,4 +8,6 @@
 
 ### Day11: Product detail page
 
-- Changned routes name following REST convention
+- Changed routes name following REST convention
+
+### Day12: Auth UI(Frontend)

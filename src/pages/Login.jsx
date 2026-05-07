@@ -1,96 +1,84 @@
-// import { useState } from "react";
-// import { Link } from "react-router";
-
-// const Login = () => {
-//   const [showPassword, setShowPassword] = useState(false);
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-[#f0f7ff] px-4">
-//       {/* Card */}
-//       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg overflow-hidden">
-//         {/* Top accent bar */}
-//         <div className="h-1.5 w-full bg-[#0088FF]" />
-
-//         <div className="p-8">
-//           {/* Header */}
-//           <div className="mb-8 text-center">
-//             <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
-//             <p className="text-sm text-gray-400 mt-1">
-//               Login to your WellneX account
-//             </p>
-//           </div>
-
-//           {/* Form */}
-//           <div className="space-y-5">
-//             {/* Email */}
-//             <div>
-//               <label className="block text-sm font-medium text-gray-600 mb-1.5">
-//                 Email
-//               </label>
-//               <input
-//                 type="email"
-//                 placeholder="you@example.com"
-//                 className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg outline-none
-//                   focus:border-[#0088FF] focus:ring-2 focus:ring-[#0088FF]/20 transition-all"
-//               />
-//             </div>
-
-//             {/* Password */}
-//             <div>
-//               <div className="flex justify-between items-center mb-1.5">
-//                 <label className="block text-sm font-medium text-gray-600">
-//                   Password
-//                 </label>
-//                 <a href="#" className="text-xs text-[#0088FF] hover:underline">
-//                   Forgot password?
-//                 </a>
-//               </div>
-//               <div className="relative">
-//                 <input
-//                   type={showPassword ? "text" : "password"}
-//                   placeholder="••••••••"
-//                   className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg outline-none
-//                     focus:border-[#0088FF] focus:ring-2 focus:ring-[#0088FF]/20 transition-all pr-10"
-//                 />
-//                 <button
-//                   type="button"
-//                   onClick={() => setShowPassword(!showPassword)}
-//                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#0088FF] transition-colors text-xs"
-//                 >
-//                   {showPassword ? "Hide" : "Show"}
-//                 </button>
-//               </div>
-//             </div>
-
-//             {/* Submit */}
-//             <button
-//               className="w-full py-2.5 bg-[#0088FF] text-white text-sm font-semibold rounded-lg
-//                 hover:bg-[#006ecc] active:scale-[0.98] transition-all duration-200 mt-2"
-//             >
-//               Login
-//             </button>
-//           </div>
-
-//           {/* Footer */}
-//           <p className="text-center text-sm text-gray-400 mt-6">
-//             Don't have an account?{" "}
-//             <Link
-//               to="/register"
-//               className="text-[#0088FF] font-medium hover:underline"
-//             >
-//               Register
-//             </Link>
-//           </p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Login;
+import { Key, Mail } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { userLogin } from "../services/authService";
 
 const Login = () => {
-  return <div className="mt-20">Login</div>;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [token, setToken] = useState(null);
+
+  const navigate = useNavigate();
+
+  const handleChange = async (event) => {
+    event.preventDefault();
+    const formData = {
+      email,
+      password,
+    };
+    try {
+      const data = await userLogin(formData);
+      // console.log("data", data);
+      setEmail("");
+      setPassword("");
+      setToken(data.accessToken);
+      // console.log("token", data.accessToken);
+      localStorage.setItem("accessToken", data.accessToken);
+      navigate("/products");
+    } catch (errMessage) {
+      setError(errMessage);
+    }
+  };
+
+  return (
+    <>
+      <div className="flex justify-center items-center h-screen flex-col">
+        <div className="shadow-2xl py-10 px-20">
+          <h2 className="text-center font-bold text-2xl mt-6 mb-6">Sign In</h2>
+          <form action="">
+            <div className="border-b border-gray-400 flex gap-2 items-center my-6">
+              <Mail className="h-4" />
+              <input
+                value={email}
+                type="text"
+                placeholder="Your Email"
+                className="border-none outline-none"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>{" "}
+            <div className="border-b border-gray-400 flex gap-2 items-center my-6">
+              <Key className="h-4" />
+              <input
+                value={password}
+                type="password"
+                placeholder="Your Password"
+                className="border-none outline-none"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            {error && <p className="text-red-500 text-center mt-2">{error}</p>}
+            <button
+              type="submit"
+              onClick={handleChange}
+              className=" mt-2 w-full py-2 bg-[#0088FF] text-white text-sm font-semibold"
+            >
+              Login
+            </button>
+          </form>
+          <p className="text-center text-sm text-gray-400 mt-6">
+            Don't have an account?{" "}
+            <Link
+              to="/register"
+              className="text-[#0088FF] font-medium hover:underline"
+            >
+              Register
+            </Link>
+          </p>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default Login;
