@@ -3,19 +3,40 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Product from "../pages/Product";
-import UserLayout from "../UserLayout";
+import UserLayout from "../layouts/UserLayout";
 import ProductDetails from "../pages/ProductDetails";
+import Blogs from "../pages/Blogs";
+import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
   return (
     <Routes>
+      {/* public */}
       <Route element={<UserLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/products" element={<Product />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/blogs" element={<Blogs />} />
+
+        {/* protected */}
+        <Route
+          path="/aaa/products"
+          element={
+            <ProtectedRoute>
+              <Product />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/aaa/products/:id"
+          element={
+            <ProtectedRoute>
+              <ProductDetails />
+            </ProtectedRoute>
+          }
+        />
       </Route>
+      <Route path="*" element={<p>Page not found!</p>} />
     </Routes>
   );
 };

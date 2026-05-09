@@ -2,13 +2,13 @@ import { Key, Mail } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { userLogin } from "../services/authService";
+import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [token, setToken] = useState(null);
-
   const navigate = useNavigate();
 
   const handleChange = async (event) => {
@@ -19,13 +19,12 @@ const Login = () => {
     };
     try {
       const data = await userLogin(formData);
-      // console.log("data", data);
+      // console.log("data", data.user);
       setEmail("");
       setPassword("");
-      setToken(data.accessToken);
-      // console.log("token", data.accessToken);
-      localStorage.setItem("accessToken", data.accessToken);
-      navigate("/products");
+      login(data.accessToken);
+      // console.log(data.accessToken);
+      navigate("/aaa/products");
     } catch (errMessage) {
       setError(errMessage);
     }

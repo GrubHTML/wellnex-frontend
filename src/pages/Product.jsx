@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getProducts } from "../services/productService";
 import fallback from "../assets/fall-back-img.png";
 import { Link } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 
 //   {
 //     img: lipikar,
@@ -29,6 +30,8 @@ const Product = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const { user } = useAuth();
+
   useEffect(() => {
     getProducts()
       .then((data) => {
@@ -51,13 +54,14 @@ const Product = () => {
       <h1 className="text-3xl md:text-5xl font-semibold text-gray-800 leading-tight text-center mt-20">
         Our Products
       </h1>
+      {user && <h1>{user?.id}</h1>}
       <div className="flex flex-wrap gap-6 justify-center p-8">
         {products.map((product) => (
           <div
             key={product.id}
             className="w-56 border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 bg-white"
           >
-            <Link to={`/products/${product.id}`}>
+            <Link to={`/aaa/products/${product.id}`}>
               {/* Image */}
               <div className="bg-gray-50 flex items-center justify-center p-4 h-52">
                 <img

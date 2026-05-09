@@ -1,8 +1,10 @@
 import { NavLink, Link } from "react-router";
 import logo from "../assets/wellnex-logo.png";
 import { useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 const Navbar = () => {
+  // Navbar UI logics
   const [menuOpen, setMenuOpen] = useState(false);
   const linkClass = ({ isActive }) =>
     isActive
@@ -10,6 +12,9 @@ const Navbar = () => {
       : "text-md font-medium border-b-2 border-transparent pb-0.5 hover:border-[#0088FF] transition-colors";
 
   const activeStyle = { borderColor: "#0088FF", color: "#0088FF" };
+  // Navbar user logics
+  const { user, logout } = useAuth();
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
@@ -23,18 +28,57 @@ const Navbar = () => {
 
         {/* Desktop Links */}
         <ul className="hidden md:flex items-center gap-6">
-          {["/", "/products", "/login", "/register"].map((path, i) => (
-            <li key={path}>
+          <li>
+            <NavLink
+              to="/"
+              end
+              className={linkClass}
+              style={({ isActive }) => (isActive ? activeStyle : {})}
+            >
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/blogs"
+              className={linkClass}
+              style={({ isActive }) => (isActive ? activeStyle : {})}
+            >
+              Blogs
+            </NavLink>
+          </li>
+          {/* conditional rendering */}
+          {user ? (
+            <>
+              <li>
+                <NavLink
+                  to="/aaa/products"
+                  className={linkClass}
+                  style={({ isActive }) => (isActive ? activeStyle : {})}
+                >
+                  Products
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  onClick={logout}
+                  className="text-md font-medium border-b-2 border-transparent pb-0.5 hover:border-[#0088FF] hover:text-[#0088FF]"
+                >
+                  Logout
+                </NavLink>
+              </li>
+            </>
+          ) : (
+            <li>
               <NavLink
-                to={path}
-                end={path === "/"}
+                to="/login"
                 className={linkClass}
                 style={({ isActive }) => (isActive ? activeStyle : {})}
               >
-                {["Home", "Products", "Login", "Register"][i]}
+                Login
               </NavLink>
             </li>
-          ))}
+          )}
         </ul>
 
         {/* Hamburger */}
@@ -57,18 +101,54 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 px-4 py-3 flex flex-col gap-3">
-          {["/", "/products", "/login"].map((path, i) => (
+          <NavLink
+            to="/"
+            end
+            className={linkClass}
+            style={({ isActive }) => (isActive ? activeStyle : {})}
+            onClick={() => setMenuOpen(false)}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/blogs"
+            className={linkClass}
+            style={({ isActive }) => (isActive ? activeStyle : {})}
+            onClick={() => setMenuOpen(false)}
+          >
+            Blogs
+          </NavLink>
+          {/* conditional */}
+          {user ? (
+            <>
+              <NavLink
+                to="/aaa/products"
+                className={linkClass}
+                style={({ isActive }) => (isActive ? activeStyle : {})}
+                onClick={() => setMenuOpen(false)}
+              >
+                Products
+              </NavLink>
+              <NavLink
+                className="text-md font-medium"
+                onClick={() => {
+                  logout();
+                  setMenuOpen(false);
+                }}
+              >
+                Logout
+              </NavLink>
+            </>
+          ) : (
             <NavLink
-              key={path}
-              to={path}
-              end={path === "/"}
+              to="/login"
               className={linkClass}
               style={({ isActive }) => (isActive ? activeStyle : {})}
               onClick={() => setMenuOpen(false)}
             >
-              {["Home", "Products", "Login", "Register"][i]}
+              Login
             </NavLink>
-          ))}
+          )}
         </div>
       )}
     </nav>
