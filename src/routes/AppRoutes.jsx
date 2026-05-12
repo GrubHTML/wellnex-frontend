@@ -7,6 +7,7 @@ import UserLayout from "../layouts/UserLayout";
 import ProductDetails from "../pages/ProductDetails";
 import Blogs from "../pages/Blogs";
 import ProtectedRoute from "./ProtectedRoute";
+import PageNotFound from "../components/PageNotFound";
 
 const AppRoutes = () => {
   return (
@@ -36,7 +37,7 @@ const AppRoutes = () => {
           }
         />
       </Route>
-      <Route path="*" element={<p>Page not found!</p>} />
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };

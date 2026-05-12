@@ -27,10 +27,10 @@ const StarRating = ({ rating }) => (
 
 const Product = () => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const { user } = useAuth();
+  const { setLoading } = useAuth();
 
   useEffect(() => {
     getProducts()
@@ -44,9 +44,9 @@ const Product = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [setLoading]);
 
-  if (loading) return <div>Loading...</div>;
+  // if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -54,7 +54,8 @@ const Product = () => {
       <h1 className="text-3xl md:text-5xl font-semibold text-gray-800 leading-tight text-center mt-20">
         Our Products
       </h1>
-      {user && <h1>{user?.id}</h1>}
+      {/* {user && <h2>{user?.username}</h2>}
+      {user && <h1>{user?.id}</h1>} */}
       <div className="flex flex-wrap gap-6 justify-center p-8">
         {products.map((product) => (
           <div

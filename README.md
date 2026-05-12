@@ -62,3 +62,10 @@
   - First create an AuthContext by using react's built-in function createContext(), so that we can share global data without props drilling.
   - Then create and AuthContextProvider so that we can store and provide global states.
   - After that create a custom hook useAuth() by using useContext() which is also react's built-in function, so that we can easily access those global state just by caling useAuth().
+
+### Day14: Add refresh token
+
+- Axios interceptor
+- Add spinner reusable component
+- React Toastiy
+- Error page created
