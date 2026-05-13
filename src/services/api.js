@@ -16,7 +16,7 @@ export const setAuthToken = (myToken) => {
   accessToken = myToken;
 };
 /* setAuthToken() => Axios instance-a global token set korar helper function।
-🔹accessToken নামে একটি local variable রাখা হচ্ছে। setAuthToken function call করলে এই variable-এ নতুন token সেট হয়।
+🔹 accessToken নামে একটি local variable রাখা হচ্ছে। setAuthToken function call করলে এই variable-এ নতুন token সেট হয়।
 */
 
 apiInstance.interceptors.request.use((config) => {
@@ -41,8 +41,9 @@ apiInstance.interceptors.response.use(
     const originalRequest = error.config;
     /* — error.config আসলে কী?
         যখন তুমি কোনো API call করো, axios সেই request-এর সব তথ্য একটা object-এ রাখে। Request fail হলে সেই object-টাই error.config হিসেবে পাওয়া যায়।
+
+      🔹 Error আসলে এই অংশ চলে। error.config হলো যে request-টা fail করেছে, সেটার সব তথ্য — পরে আবার retry করার জন্য রেখে দেওয়া হচ্ছে।
     */
-    // 🔹 Error আসলে এই অংশ চলে। error.config হলো যে request-টা fail করেছে, সেটার সব তথ্য — পরে আবার retry করার জন্য রেখে দেওয়া হচ্ছে।
     if (
       error.response?.status === 401 && //401 error? → মানে Unauthorized — token মেয়াদ শেষ বা নেই
       !originalRequest._retry && //already retry hoyni? → এই request আগে retry হয়নি (infinite loop ঠেকাতে)
@@ -71,7 +72,7 @@ apiInstance.interceptors.response.use(
          * user-কে login পেজে পাঠিয়ে দাও
          */
         return Promise.reject(refreshError);
-        //error propagate => error ke samne pathano(bubble up kora)
+        // error propagate => error ke samne pathano(bubble up kora)
         // ekhane error handle na kore next .catch() ba caller er kache error ke pathano
         // এর মানে:
         // refresh fail হয়েছে

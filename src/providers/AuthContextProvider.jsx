@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 // eta ekta provider component jeta kina puro app ke auth data dibe
 const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  // loggoed in user info rakhbe initially null
+  // logged in user info rakhbe initially null
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(true);
   // app loading state — authentication check চলাকালীন true থাকবে

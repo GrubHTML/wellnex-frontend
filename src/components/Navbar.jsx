@@ -2,6 +2,8 @@ import { NavLink, Link } from "react-router";
 import logo from "../assets/wellnex-logo.png";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
+import UserInfoDropdown from "./UserInfoDropdown";
+import CartInformation from "./CartInformation";
 
 const Navbar = () => {
   // Navbar UI logics
@@ -12,11 +14,9 @@ const Navbar = () => {
       : "text-md font-medium border-b-2 border-transparent pb-0.5 hover:border-[#0088FF] transition-colors";
 
   const activeStyle = { borderColor: "#0088FF", color: "#0088FF" };
-  // Navbar user logics
+  // Authenticated user logics
   const { user, logout, success } = useAuth();
-  const myName = user?.username;
-  const nameFirstLetter = myName?.charAt(0);
-  // console.log(user);
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
@@ -61,6 +61,7 @@ const Navbar = () => {
                   Products
                 </NavLink>
               </li>
+
               <li>
                 {success && (
                   <p className="text-green-500 text-center mt-2 font-bold">
@@ -69,30 +70,17 @@ const Navbar = () => {
                 )}
                 <button
                   onClick={logout}
-                  className="cursor-pointer text-md font-medium border-b-2 border-transparent pb-0.5 hover:border-[#0088FF] hover:text-[#0088FF]"
+                  className="cursor-pointer text-md font-medium border-b-2 border-transparent hover:border-[#0088FF] hover:text-[#0088FF]"
                 >
                   Logout
                 </button>
               </li>
-              <div className="relative group inline-block">
-                {/* avatar */}
-                <div className="bg-[#0088ff] rounded-full font-bold h-8 w-8 flex justify-center items-center text-white cursor-pointer">
-                  {nameFirstLetter}
-                </div>
-                {/* dropdown */}
-                <div
-                  className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg p-3
-      opacity-0 scale-95 translate-y-2
-      group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0
-      transition-all duration-200 ease-out
-      pointer-events-none group-hover:pointer-events-auto"
-                >
-                  <p className="font-semibold text-gray-800">
-                    {user?.username}
-                  </p>
-                  <p className="text-sm text-gray-500">{user?.email}</p>
-                </div>
-              </div>
+              <li>
+                <CartInformation />
+              </li>
+              <li>
+                <UserInfoDropdown />
+              </li>
             </>
           ) : (
             <li>

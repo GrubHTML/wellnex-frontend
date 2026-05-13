@@ -4,14 +4,6 @@ import fallback from "../assets/fall-back-img.png";
 import { Link } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 
-//   {
-//     img: lipikar,
-//     name: "Lipikar surgras soap bar - LA ROCHE",
-//     price: "€7.20",
-//     rating: 5,
-//     reviews: 2,
-//   },
-
 const StarRating = ({ rating }) => (
   <div className="flex items-center gap-1">
     {[1, 2, 3, 4, 5].map((star) => (
@@ -54,8 +46,7 @@ const Product = () => {
       <h1 className="text-3xl md:text-5xl font-semibold text-gray-800 leading-tight text-center mt-20">
         Our Products
       </h1>
-      {/* {user && <h2>{user?.username}</h2>}
-      {user && <h1>{user?.id}</h1>} */}
+
       <div className="flex flex-wrap gap-6 justify-center p-8">
         {products.map((product) => (
           <div

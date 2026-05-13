@@ -51,7 +51,7 @@
 
 ### Day13: Auth Flow Fix
 
-- Using Context API
+- Using Auth Context
 
 - Goal:
   - User stays logged in
@@ -63,9 +63,21 @@
   - Then create and AuthContextProvider so that we can store and provide global states.
   - After that create a custom hook useAuth() by using useContext() which is also react's built-in function, so that we can easily access those global state just by caling useAuth().
 
-### Day14: Add refresh token
+### OffDay: Add refresh token
 
 - Axios interceptor
 - Add spinner reusable component
 - React Toastiy
 - Error page created
+
+### Day14: Cart System(part-1)
+
+- Goal:
+  - Add products to cart
+  - Store cart locally
+  - Show cart count on navbar
+- Flow:
+  - Create cart context
+  - Saved in localStorage
+  - Add cart count on navbar
+  - Cart UI in dropdown
