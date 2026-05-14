@@ -18,7 +18,7 @@ const Navbar = () => {
   const { user, logout, success } = useAuth();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm h-15">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
@@ -76,7 +76,9 @@ const Navbar = () => {
                 </button>
               </li>
               <li>
-                <CartInformation />
+                <NavLink to="/aaa/cart">
+                  <CartInformation />
+                </NavLink>
               </li>
               <li>
                 <UserInfoDropdown />

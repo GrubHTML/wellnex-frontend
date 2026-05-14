@@ -9,7 +9,7 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
-  const { addToCart, cartItems } = useCart();
+  const { addToCart } = useCart();
 
   useEffect(() => {
     if (!id) return;
@@ -49,16 +49,6 @@ const ProductDetails = () => {
           </button>
           <p className="text-gray-600">{product.description}</p>
         </div>
-      </div>
-      <div className="flex justify-center items-center flex-col gap-2 mt-10">
-        <p className="text-2xl font-bold">Cart info temprorary</p>
-        {cartItems &&
-          cartItems.map((cartItem) => (
-            <p key={cartItem.id}>
-              <p>{cartItem?.name}</p>
-              <p>{cartItem?.price}</p>
-            </p>
-          ))}
       </div>
     </>
   );

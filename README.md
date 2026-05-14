@@ -81,3 +81,21 @@
   - Saved in localStorage
   - Add cart count on navbar
   - Cart UI in dropdown
+
+### Day15: Cart Page
+
+- Goal
+  - Display all cart items
+  - Quantity controls
+  - Remove item
+  - Cart total
+
+- Flow
+  - Create cart page
+  - Read cart data
+  - Render cart item
+  - Quantity increase
+  - Quantity decrease
+  - Remove item
+  - Cart total
+  - Empty cart UI

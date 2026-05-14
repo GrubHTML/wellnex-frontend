@@ -27,7 +27,16 @@ const CartContextProvider = ({ children }) => {
     );
   };
 
-  const cartInfo = { cartItems, addToCart };
+  const removeFromCart = (productId) => {
+    setCartItems((prev) => {
+      const updated = prev.filter((item) => item.id !== productId);
+      localStorage.setItem("cart", JSON.stringify(updated));
+      return updated;
+    });
+    toast.error("Product removed from cart!");
+  };
+
+  const cartInfo = { cartItems, addToCart, removeFromCart };
   return (
     <CartContext.Provider value={cartInfo}>{children}</CartContext.Provider>
   );
