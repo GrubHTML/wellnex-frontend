@@ -37,6 +37,7 @@ apiInstance.interceptors.response.use(
     return response;
   }, // 🔹 সফল response আসলে সেটা সরাসরি return করে দাও — কোনো পরিবর্তন নেই।
   async (error) => {
+    console.log("INTERCEPTOR ERROR:", error.config?.url);
     // error handle
     const originalRequest = error.config;
     /* — error.config আসলে কী?
@@ -53,20 +54,21 @@ apiInstance.interceptors.response.use(
 
       try {
         const res = await refresh(); // new token nicchi
-        const refreshAccessToken = res.data.accessToken; // token extract
+        const refreshAccessToken = res.accessToken; // token extract
         setAuthToken(refreshAccessToken); // axios a update
         // 🔹 নতুন access token আনার চেষ্টা করা হচ্ছে। পেলে সেটা axios instance-এ সেট করা হচ্ছে।
 
-        originalRequest.headers.Authorization = `Bearer ${refreshAccessToken}`;
+        originalRequest.headers = {
+          ...originalRequest.headers,
+          Authorization: `Bearer ${refreshAccessToken}`,
+        };
         return apiInstance(originalRequest);
         //🔹 পুরনো failed request-এ নতুন token বসিয়ে আবার পাঠানো হচ্ছে — user কিছুই বুঝবে না, automatically কাজ হয়ে যাবে 🔁
       } catch (refreshError) {
         //Refresh fail hole
         setAuthToken("");
         window.location.href = "/login";
-        console.log(
-          refreshError.response?.data?.message || "Something went wrong",
-        );
+        console.log("REFRESH ERROR:", refreshError);
         /* 🔹 Refresh-ও fail করলে (মানে refresh token-ও মেয়াদ  শেষ):
          * token মুছে দাও
          * user-কে login পেজে পাঠিয়ে দাও

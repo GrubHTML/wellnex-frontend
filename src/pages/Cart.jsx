@@ -1,24 +1,56 @@
-import { useState } from "react";
-import { useCart } from "../hooks/useCart";
+import { useEffect, useState } from "react";
+import { deleteCart, getCarts } from "../services/cartService";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const Cart = () => {
-  const { cartItems, removeFromCart } = useCart();
-  const [quantities, setQuantites] = useState({});
+  const [cartItems, setCartItems] = useState([]);
+  const [error, setError] = useState(null);
+  const [quantity, setQuantity] = useState(null);
 
-  const calculateSubtotal = () => {
-    return cartItems
-      .reduce((subTotal, item) => {
-        const quantity = quantities[item.id] || 1;
-        return subTotal + item.price * quantity;
-      }, 0)
-      .toFixed(2);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const cartFetch = async () => {
+      try {
+        const data = await getCarts();
+        // console.log(data.cartItems);
+        setCartItems(data.cartItems);
+      } catch (error) {
+        setError(error.message || "something wrong");
+      }
+    };
+    cartFetch();
+  }, []);
+  // console.log(cartItems);
+  const removeFromCart = async (id) => {
+    const item = cartItems.find((c) => c.id === id);
+    try {
+      await deleteCart(id);
+      toast.error(
+        <p>
+          <span className="font-bold">{item?.product?.name} </span>
+          has been removed!
+        </p>,
+      );
+    } catch (error) {
+      setError(error.message || "something wrong in removing cart item");
+    }
+  };
+  const calculateSubTotal = () => {
+    const subTotal = cartItems.reduce((acc, cartItem) => {
+      return acc + cartItem.quantity * cartItem.product.price;
+    }, 0);
+    return subTotal.toFixed(2);
   };
   const calculateTotal = () => {
-    const flatRate = Number(10.0);
-    const pickUp = Number(15.0);
-    const total = Number(calculateSubtotal()) + flatRate + pickUp;
+    const deliveryCharge = 120;
+    const packaging = 15;
+    const total = Number(calculateSubTotal()) + deliveryCharge + packaging;
     return total.toFixed(2);
   };
+
+  if (error) return <div>Error: {error}</div>;
   return (
     <div className="mt-20 h-screen px-10 py-8 relative">
       <div className="md:grid grid-cols-12 gap-10">
@@ -38,45 +70,46 @@ const Cart = () => {
               </tr>
             </thead>
             <tbody>
-              {cartItems.map((cartItem) => (
-                <tr key={cartItem.id} className="border-b border-gray-100">
-                  <td
-                    className="py-4 text-gray-400 cursor-pointer"
-                    onClick={() => removeFromCart(cartItem.id)}
+              {cartItems.map((cartItem) => {
+                const subtotal = cartItem?.quantity * cartItem?.product?.price;
+                return (
+                  <tr
+                    key={cartItem.id}
+                    className="border-b border-gray-100"
+                    onClick={() =>
+                      navigate(`/aaa/products/${cartItem.product.id}`)
+                    }
                   >
-                    x
-                  </td>
-                  <td className="py-4 flex items-center gap-4">
-                    <img
-                      src={cartItem?.image}
-                      alt={cartItem?.name}
-                      className="w-16 h-20 object-cover"
-                    />
-                    <span>{cartItem?.name}</span>
-                  </td>
-                  <td className="py-4">&#2547; {cartItem?.price}</td>
-                  <td className="py-4">
-                    <input
-                      type="number"
-                      min="1"
-                      value={quantities[cartItem.id] || 1}
-                      onChange={(e) =>
-                        setQuantites({
-                          ...quantities,
-                          [cartItem.id]: Math.max(1, Number(e.target.value)),
-                        })
-                      }
-                      className="border border-gray-300 w-14 text-center py-1"
-                    />
-                  </td>
-                  <td className="py-4 text-right">
-                    &#2547;{" "}
-                    {(cartItem.price * (quantities[cartItem.id] || 1)).toFixed(
-                      2,
-                    )}
-                  </td>
-                </tr>
-              ))}
+                    <td
+                      className="py-4 text-gray-400 cursor-pointer"
+                      onClick={() => removeFromCart(cartItem.id)}
+                    >
+                      x
+                    </td>
+                    <td className="py-4 flex items-center gap-4">
+                      <img
+                        src={cartItem?.product?.image}
+                        alt={cartItem?.product?.name}
+                        className="w-16 h-20 object-cover"
+                      />
+                      <span>{cartItem?.product?.name}</span>
+                    </td>
+                    <td className="py-4">&#2547; {cartItem?.product?.price}</td>
+                    <td className="py-4">
+                      <input
+                        type="number"
+                        min="1"
+                        value={cartItem?.quantity}
+                        onChange={(e) => setQuantity(e.target.value)}
+                        className="border border-gray-300 w-14 text-center py-1"
+                      />
+                    </td>
+                    <td className="py-4 text-right">
+                      &#2547; {subtotal.toFixed(2)}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
 
@@ -104,21 +137,21 @@ const Cart = () => {
           </h2>
           <div className="flex justify-between pt-3 pb-2 border-b border-gray-200">
             <span>Subtotal</span>
-            <span>&#2547; {calculateSubtotal()}</span>
+            <span>&#2547; {calculateSubTotal()}</span>
           </div>
           <div className="flex justify-between py-4 mt-3 border-b border-gray-200">
             <span>Shipping</span>
             <div className="text-right text-sm text-gray-500 flex flex-col gap-1">
               <p>Free shipping</p>
-              <p>Flat rate: &#2547;10.00</p>
-              <p>Pickup: &#2547;15.00</p>
+              <p>Delivery Charge: &#2547;120.00</p>
+              <p>Packaging: &#2547;15.00</p>
             </div>
           </div>
           <div className="flex justify-between py-4 mt-3 border-b border-gray-200 font-semibold">
             <span>Total</span>
             <span>&#2547; {calculateTotal()}</span>
           </div>
-          <button className="mt-15 w-full bg-gray-900 text-white py-3 text-sm hover:bg-[#0088FF] transition">
+          <button className="mt-15 w-full bg-gray-900 text-white py-3 text-sm hover:bg-gray-600 transition">
             Proceed to checkout
           </button>
         </div>

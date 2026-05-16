@@ -31,7 +31,7 @@ export const refresh = async () => {
     const response = await apiInstance.post("/refresh");
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || "Something went wrong!";
+    throw error || "Something went wrong!";
   }
 };
 export const logoutFunct = async () => {
@@ -39,6 +39,6 @@ export const logoutFunct = async () => {
     const response = await apiInstance.post("/logout");
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || "Something went wrong!";
+    throw error || "Something went wrong!";
   }
 };

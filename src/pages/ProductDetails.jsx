@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { getProductById } from "../services/productService";
 import { useParams } from "react-router";
 import fallback from "../assets/fall-back-img.png";
-import { useCart } from "../hooks/useCart";
+import { addToCart } from "../services/cartService";
+import { toast } from "react-toastify";
+// import { useCart } from "../hooks/useCart";
 
 const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cartError, setCartError] = useState(null);
   const { id } = useParams();
-  const { addToCart } = useCart();
+  // const { addToCart } = useCart();
 
   useEffect(() => {
     if (!id) return;
@@ -20,6 +23,17 @@ const ProductDetails = () => {
       .catch((error) => setError("Something error happens in fetching", error))
       .finally(() => setLoading(false));
   }, [id]);
+
+  const AddingToCart = async () => {
+    // console.log({ id });
+    try {
+      await addToCart({ id });
+      // console.log(data);
+      toast.success("Product added to the cart!");
+    } catch (error) {
+      setCartError(error?.message || "fetching cart error");
+    }
+  };
 
   if (error) return <div>Error: {error}</div>;
   if (loading) return <div>Loading....</div>;
@@ -41,7 +55,7 @@ const ProductDetails = () => {
           <p className="text-md pb-2 border-b">{product.name}</p>
           <p className="text-lg mt-2 font-bold">&#x09F3; {product.price}</p>
           <button
-            onClick={() => addToCart(product)}
+            onClick={AddingToCart}
             className="mt-8 mb-8 px-8 py-3 text-white font-medium
           bg-gray-900 hover:bg-[#0088FF] hover:text-white transition-all duration-300"
           >

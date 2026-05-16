@@ -99,3 +99,22 @@
   - Remove item
   - Cart total
   - Empty cart UI
+
+### Day16: Cart Integration
+
+- Goal:
+  - Store cart in database
+  - Fetch cart from backend
+  - Handle sync properly
+
+- Flow
+  - Cart database design
+  - Create cart APIs
+  - Auth protection
+  - Add product validation
+  - Frontend cart service
+  - Sync strategy
+
+- Optional:
+  - Axios 401 redirect issue solved.
+  - "REFRESH ERROR:", refreshError fixed in api.js => which caused unneccessary redirect to "/login"
