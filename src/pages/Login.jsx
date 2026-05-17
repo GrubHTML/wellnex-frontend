@@ -28,7 +28,7 @@ const Login = () => {
       setUser(data.user);
       setToken(data.accessToken);
       toast.success(data.message);
-      navigate("/aaa/products");
+      navigate("/products");
     } catch (errMessage) {
       setError(errMessage);
     }

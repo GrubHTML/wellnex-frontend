@@ -54,7 +54,7 @@ const Navbar = () => {
             <>
               <li>
                 <NavLink
-                  to="/aaa/products"
+                  to="/products"
                   className={linkClass}
                   style={({ isActive }) => (isActive ? activeStyle : {})}
                 >
@@ -77,7 +77,7 @@ const Navbar = () => {
               </li>
               <li>
                 <NavLink
-                  to="/aaa/cart"
+                  to="/cart"
                   className={linkClass}
                   style={({ isActive }) => (isActive ? activeStyle : {})}
                 >
@@ -147,7 +147,7 @@ const Navbar = () => {
             <>
               <li>
                 <NavLink
-                  to="/aaa/products"
+                  to="/products"
                   className={linkClass}
                   style={({ isActive }) => (isActive ? activeStyle : {})}
                   onClick={() => setMenuOpen(false)}
@@ -172,7 +172,7 @@ const Navbar = () => {
               </li>
               <li>
                 <NavLink
-                  to="/aaa/cart"
+                  to="/cart"
                   className={linkClass}
                   style={({ isActive }) => (isActive ? activeStyle : {})}
                   onClick={() => setMenuOpen(false)}

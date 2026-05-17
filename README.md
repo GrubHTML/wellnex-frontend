@@ -119,3 +119,21 @@
   - Axios 401 redirect issue solved.
   - "REFRESH ERROR:", refreshError fixed in api.js => which caused unneccessary redirect to "/login"
   - Concurrent refresh problem
+
+### Day17: Checkout Page
+
+- Goal:
+  - Shipping form
+  - Order summary
+  - Checkout structure
+
+- Flow
+  - Create checkout page
+  - Navigate from cart
+  - Shipping form UI
+  - Order summary section
+  - Layout
+  - Basic validation
+  - Save shipping data to localStorage
+  - Empty cart protection
+  - Testing

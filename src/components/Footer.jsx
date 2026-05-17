@@ -63,8 +63,6 @@ const Footer = () => {
       <p className="text-xs text-gray-400 px-8 py-4 text-center">
         © 2026 Wellnex. All rights reserved
       </p>
-      {/* <div className="bg-[#0088FF] h-12 w-62.5" /> */}
-      {/* </div> */}
     </footer>
   );
 };

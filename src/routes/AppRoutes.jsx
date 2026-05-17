@@ -9,6 +9,7 @@ import Blogs from "../pages/Blogs";
 import ProtectedRoute from "./ProtectedRoute";
 import PageNotFound from "../components/PageNotFound";
 import Cart from "../pages/Cart";
+import Checkout from "../pages/Checkout";
 
 const AppRoutes = () => {
   return (
@@ -22,7 +23,7 @@ const AppRoutes = () => {
 
         {/* protected routes*/}
         <Route
-          path="/aaa/products"
+          path="/products"
           element={
             <ProtectedRoute>
               <Product />
@@ -30,7 +31,7 @@ const AppRoutes = () => {
           }
         />
         <Route
-          path="/aaa/products/:id"
+          path="/products/:id"
           element={
             <ProtectedRoute>
               <ProductDetails />
@@ -38,10 +39,18 @@ const AppRoutes = () => {
           }
         />
         <Route
-          path="/aaa/cart"
+          path="/cart"
           element={
             <ProtectedRoute>
               <Cart />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <Checkout />
             </ProtectedRoute>
           }
         />

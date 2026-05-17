@@ -1,25 +1,17 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useCart } from "../hooks/useCart";
 
 const Cart = () => {
   const [error] = useState(null);
-  const { cartItems, removeFromCart, updateQuantity } = useCart();
+  const {
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    calculateSubTotal,
+    calculateTotal,
+  } = useCart();
   const navigate = useNavigate();
-
-  // price calculation
-  const calculateSubTotal = () => {
-    const subTotal = cartItems.reduce((acc, cartItem) => {
-      return acc + cartItem.quantity * cartItem.product.price;
-    }, 0);
-    return subTotal.toFixed(2);
-  };
-  const calculateTotal = () => {
-    const deliveryCharge = 120;
-    const packaging = 15;
-    const total = Number(calculateSubTotal()) + deliveryCharge + packaging;
-    return total.toFixed(2);
-  };
 
   if (error) return <div>Error: {error}</div>;
   return (
@@ -59,7 +51,7 @@ const Cart = () => {
                           alt={cartItem?.product?.name}
                           className="w-16 h-20 object-cover"
                           onClick={() =>
-                            navigate(`/aaa/products/${cartItem.product.id}`)
+                            navigate(`/products/${cartItem.product.id}`)
                           }
                         />
                         <span>{cartItem?.product?.name}</span>
@@ -105,29 +97,31 @@ const Cart = () => {
         </div>
 
         {/* Right - Cart Totals (col-span-4) */}
-        <div className="col-span-4 px-10 py-8 ">
-          <h2 className="text-xl font-semibold mb-4 pb-4 border-b border-gray-200">
-            Cart totals
-          </h2>
-          <div className="flex justify-between pt-3 pb-2 border-b border-gray-200">
-            <span>Subtotal</span>
-            <span>&#2547; {calculateSubTotal()}</span>
-          </div>
-          <div className="flex justify-between py-4 mt-3 border-b border-gray-200">
-            <span>Shipping</span>
-            <div className="text-right text-sm text-gray-500 flex flex-col gap-1">
-              <p>Free shipping</p>
-              <p>Delivery Charge: &#2547;120.00</p>
-              <p>Packaging: &#2547;15.00</p>
+        <div className="col-span-4 sm:mt-10 md:mt-0">
+          <div className="bg-[#f0f7ff] px-10 py-8 rounded-2xl">
+            <h2 className="text-xl font-semibold mb-4 pb-4 border-b border-gray-200">
+              Cart totals
+            </h2>
+            <div className="flex justify-between pt-3 pb-2 border-b border-gray-200">
+              <span>Subtotal</span>
+              <span>&#2547; {calculateSubTotal()}</span>
             </div>
+            <div className="flex justify-between py-4 mt-3 border-b border-gray-200">
+              <span>Shipping</span>
+              <div className="text-right text-sm text-gray-500 flex flex-col gap-1">
+                <p>Free shipping</p>
+                <p>Delivery Charge: &#2547;120.00</p>
+                <p>Packaging: &#2547;15.00</p>
+              </div>
+            </div>
+            <div className="flex justify-between py-4 mt-3 border-b border-gray-200 font-semibold">
+              <span>Total</span>
+              <span>&#2547; {calculateTotal()}</span>
+            </div>
+            <button className="mt-15 w-full rounded-full text-white py-3 text-sm bg-gray-900 hover:bg-gray-600 transition-all duration-300">
+              <Link to="/checkout">Proceed to checkout</Link>
+            </button>
           </div>
-          <div className="flex justify-between py-4 mt-3 border-b border-gray-200 font-semibold">
-            <span>Total</span>
-            <span>&#2547; {calculateTotal()}</span>
-          </div>
-          <button className="mt-15 w-full  text-white py-3 text-sm bg-gray-900 hover:bg-gray-600 transition-all duration-300">
-            Proceed to checkout
-          </button>
         </div>
       </div>
     </div>

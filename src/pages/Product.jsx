@@ -53,7 +53,7 @@ const Product = () => {
             key={product.id}
             className="w-56 border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 bg-white"
           >
-            <Link to={`/aaa/products/${product.id}`}>
+            <Link to={`/products/${product.id}`}>
               {/* Image */}
               <div className="bg-gray-50 flex items-center justify-center p-4 h-52">
                 <img

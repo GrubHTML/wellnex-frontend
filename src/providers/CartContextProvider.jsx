@@ -79,11 +79,27 @@ const CartContextProvider = ({ children }) => {
     }
   };
 
+  // price calculation
+  const calculateSubTotal = () => {
+    const subTotal = cartItems.reduce((acc, cartItem) => {
+      return acc + cartItem.quantity * cartItem.product.price;
+    }, 0);
+    return subTotal.toFixed(2);
+  };
+  const calculateTotal = () => {
+    const deliveryCharge = 120;
+    const packaging = 15;
+    const total = Number(calculateSubTotal()) + deliveryCharge + packaging;
+    return total.toFixed(2);
+  };
+
   const cartInfo = {
     cartItems,
     addToCartFn,
     removeFromCart,
     updateQuantity,
+    calculateTotal,
+    calculateSubTotal,
   };
   return (
     <CartContext.Provider value={cartInfo}>{children}</CartContext.Provider>
