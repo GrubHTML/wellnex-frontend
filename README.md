@@ -118,3 +118,4 @@
 - Optional:
   - Axios 401 redirect issue solved.
   - "REFRESH ERROR:", refreshError fixed in api.js => which caused unneccessary redirect to "/login"
+  - Concurrent refresh problem

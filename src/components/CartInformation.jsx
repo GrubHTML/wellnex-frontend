@@ -6,7 +6,7 @@ const CartInformation = () => {
   return (
     <div className="relative group inline-block">
       {/* cart icon on navbar */}
-      <FaShoppingCart className="cursor-pointer  text-gray-800 hover:text-[#0088FF] h-5 w-5" />
+      <FaShoppingCart className="cursor-pointer h-5 w-5" />
       {cartItems?.length > 0 && (
         <span
           className="absolute -top-2 -right-2 bg-red-500 text-white 

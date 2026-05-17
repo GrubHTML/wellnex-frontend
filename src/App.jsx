@@ -20,7 +20,6 @@ const App = () => {
         // axios er header a token boshay(API call er jonno)
         setToken(refreshRes.accessToken);
         // global auth state a token save korlam
-
         const res = await me();
         // me() function দিয়ে সার্ভার থেকে লগইন করা user-এর তথ্য আনা হচ্ছে, তারপর সেই তথ্য global state-এ সেট করা হচ্ছে।
         setUser(res.user);

@@ -2,7 +2,7 @@ import apiInstance from "./api.js";
 
 export const addToCart = async (id) => {
   try {
-    const response = await apiInstance.post("/carts", id);
+    const response = await apiInstance.post("/carts", { id });
     return response.data;
   } catch (error) {
     throw error.response?.data?.message || "Something went wrong!";
@@ -27,9 +27,9 @@ export const getCartById = async (id) => {
   }
 };
 
-export const updateCart = async (id) => {
+export const updateCart = async (id, quantity) => {
   try {
-    const response = await apiInstance.put(`/carts/${id}`);
+    const response = await apiInstance.put(`/carts/${id}`, { quantity });
     return response.data;
   } catch (error) {
     throw error.response?.data?.message || "Something went wrong!";

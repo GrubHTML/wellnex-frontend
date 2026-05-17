@@ -10,7 +10,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const linkClass = ({ isActive }) =>
     isActive
-      ? "text-md font-medium border-b-2 pb-0.5"
+      ? "text-md font-medium border-b-2 pb-0.5 inline block"
       : "text-md font-medium border-b-2 border-transparent pb-0.5 hover:border-[#0088FF] transition-colors";
 
   const activeStyle = { borderColor: "#0088FF", color: "#0088FF" };
@@ -76,7 +76,11 @@ const Navbar = () => {
                 </button>
               </li>
               <li>
-                <NavLink to="/aaa/cart">
+                <NavLink
+                  to="/aaa/cart"
+                  className={linkClass}
+                  style={({ isActive }) => (isActive ? activeStyle : {})}
+                >
                   <CartInformation />
                 </NavLink>
               </li>
@@ -116,56 +120,80 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-4 py-3 flex flex-col gap-3">
-          <NavLink
-            to="/"
-            end
-            className={linkClass}
-            style={({ isActive }) => (isActive ? activeStyle : {})}
-            onClick={() => setMenuOpen(false)}
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/blogs"
-            className={linkClass}
-            style={({ isActive }) => (isActive ? activeStyle : {})}
-            onClick={() => setMenuOpen(false)}
-          >
-            Blogs
-          </NavLink>
-          {/* conditional */}
-          {user ? (
-            <>
-              <NavLink
-                to="/aaa/products"
-                className={linkClass}
-                style={({ isActive }) => (isActive ? activeStyle : {})}
-                onClick={() => setMenuOpen(false)}
-              >
-                Products
-              </NavLink>
-              <NavLink
-                className="text-md font-medium"
-                onClick={() => {
-                  logout();
-                  setMenuOpen(false);
-                }}
-              >
-                Logout
-              </NavLink>
-            </>
-          ) : (
+        <ul className="md:hidden bg-white border-t border-gray-100 px-4 py-3 flex flex-col gap-3">
+          <li>
             <NavLink
-              to="/login"
+              to="/"
+              end
               className={linkClass}
               style={({ isActive }) => (isActive ? activeStyle : {})}
               onClick={() => setMenuOpen(false)}
             >
-              Login
+              Home
             </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/blogs"
+              className={linkClass}
+              style={({ isActive }) => (isActive ? activeStyle : {})}
+              onClick={() => setMenuOpen(false)}
+            >
+              Blogs
+            </NavLink>
+          </li>
+          {/* conditional rendering */}
+          {user && user ? (
+            <>
+              <li>
+                <NavLink
+                  to="/aaa/products"
+                  className={linkClass}
+                  style={({ isActive }) => (isActive ? activeStyle : {})}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Products
+                </NavLink>
+              </li>
+              <li>
+                {success && (
+                  <p className="text-green-500 font-bold">{success}</p>
+                )}
+
+                <button
+                  className="text-md font-medium text-left border-b-2 border-transparent hover:border-[#0088FF] hover:text-[#0088FF]"
+                  onClick={() => {
+                    logout();
+                    setMenuOpen(false);
+                  }}
+                >
+                  Logout
+                </button>
+              </li>
+              <li>
+                <NavLink
+                  to="/aaa/cart"
+                  className={linkClass}
+                  style={({ isActive }) => (isActive ? activeStyle : {})}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <CartInformation />
+                </NavLink>
+              </li>
+            </>
+          ) : (
+            <li>
+              <NavLink
+                to="/login"
+                className={linkClass}
+                style={({ isActive }) => (isActive ? activeStyle : {})}
+                onClick={() => setMenuOpen(false)}
+              >
+                Login
+              </NavLink>
+            </li>
           )}
-        </div>
+        </ul>
       )}
     </nav>
   );

@@ -1,42 +1,13 @@
-import { useEffect, useState } from "react";
-import { deleteCart, getCarts } from "../services/cartService";
-import { toast } from "react-toastify";
+import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useCart } from "../hooks/useCart";
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
-  const [error, setError] = useState(null);
-  const [quantity, setQuantity] = useState(null);
-
+  const [error] = useState(null);
+  const { cartItems, removeFromCart, updateQuantity } = useCart();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const cartFetch = async () => {
-      try {
-        const data = await getCarts();
-        // console.log(data.cartItems);
-        setCartItems(data.cartItems);
-      } catch (error) {
-        setError(error.message || "something wrong");
-      }
-    };
-    cartFetch();
-  }, []);
-  // console.log(cartItems);
-  const removeFromCart = async (id) => {
-    const item = cartItems.find((c) => c.id === id);
-    try {
-      await deleteCart(id);
-      toast.error(
-        <p>
-          <span className="font-bold">{item?.product?.name} </span>
-          has been removed!
-        </p>,
-      );
-    } catch (error) {
-      setError(error.message || "something wrong in removing cart item");
-    }
-  };
+  // price calculation
   const calculateSubTotal = () => {
     const subTotal = cartItems.reduce((acc, cartItem) => {
       return acc + cartItem.quantity * cartItem.product.price;
@@ -52,7 +23,7 @@ const Cart = () => {
 
   if (error) return <div>Error: {error}</div>;
   return (
-    <div className="mt-20 h-screen px-10 py-8 relative">
+    <div className="mt-20 px-10 py-8 relative">
       <div className="md:grid grid-cols-12 gap-10">
         {/* Left - Shopping Cart (col-span-8) */}
         <div className="col-span-8 px-10 py-8 ">
@@ -70,46 +41,49 @@ const Cart = () => {
               </tr>
             </thead>
             <tbody>
-              {cartItems.map((cartItem) => {
-                const subtotal = cartItem?.quantity * cartItem?.product?.price;
-                return (
-                  <tr
-                    key={cartItem.id}
-                    className="border-b border-gray-100"
-                    onClick={() =>
-                      navigate(`/aaa/products/${cartItem.product.id}`)
-                    }
-                  >
-                    <td
-                      className="py-4 text-gray-400 cursor-pointer"
-                      onClick={() => removeFromCart(cartItem.id)}
-                    >
-                      x
-                    </td>
-                    <td className="py-4 flex items-center gap-4">
-                      <img
-                        src={cartItem?.product?.image}
-                        alt={cartItem?.product?.name}
-                        className="w-16 h-20 object-cover"
-                      />
-                      <span>{cartItem?.product?.name}</span>
-                    </td>
-                    <td className="py-4">&#2547; {cartItem?.product?.price}</td>
-                    <td className="py-4">
-                      <input
-                        type="number"
-                        min="1"
-                        value={cartItem?.quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                        className="border border-gray-300 w-14 text-center py-1"
-                      />
-                    </td>
-                    <td className="py-4 text-right">
-                      &#2547; {subtotal.toFixed(2)}
-                    </td>
-                  </tr>
-                );
-              })}
+              {cartItems &&
+                cartItems.map((cartItem) => {
+                  const subtotal =
+                    cartItem?.quantity * cartItem?.product?.price;
+                  return (
+                    <tr key={cartItem.id} className="border-b border-gray-100">
+                      <td
+                        className="py-4 text-gray-400 cursor-pointer"
+                        onClick={() => removeFromCart(cartItem.id)}
+                      >
+                        x
+                      </td>
+                      <td className="py-4 flex items-center gap-4">
+                        <img
+                          src={cartItem?.product?.image}
+                          alt={cartItem?.product?.name}
+                          className="w-16 h-20 object-cover"
+                          onClick={() =>
+                            navigate(`/aaa/products/${cartItem.product.id}`)
+                          }
+                        />
+                        <span>{cartItem?.product?.name}</span>
+                      </td>
+                      <td className="py-4">
+                        &#2547; {cartItem?.product?.price}
+                      </td>
+                      <td className="py-4">
+                        <input
+                          type="number"
+                          min="1"
+                          value={cartItem?.quantity}
+                          onChange={(e) =>
+                            updateQuantity(cartItem.id, e.target.value)
+                          }
+                          className="border border-gray-300 w-14 text-center py-1"
+                        />
+                      </td>
+                      <td className="py-4 text-right">
+                        &#2547; {subtotal.toFixed(2)}
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
 
@@ -151,7 +125,7 @@ const Cart = () => {
             <span>Total</span>
             <span>&#2547; {calculateTotal()}</span>
           </div>
-          <button className="mt-15 w-full bg-gray-900 text-white py-3 text-sm hover:bg-gray-600 transition">
+          <button className="mt-15 w-full  text-white py-3 text-sm bg-gray-900 hover:bg-gray-600 transition-all duration-300">
             Proceed to checkout
           </button>
         </div>
